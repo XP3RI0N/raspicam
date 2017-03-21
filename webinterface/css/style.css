@@ -3,12 +3,25 @@
   padding: 0; }
 
 body {
+  position: absolute;
   display: flex;
   flex-flow: column nowrap;
   min-height: 100%;
-  position: absolute; }
+  min-width: 100%;
+  background-color: #FFFFFF; }
 
 main {
   flex-grow: 1; }
+
+header, footer {
+  color: #FFFFFF;
+  background-color: #123456; }
+
+header h1 {
+  text-align: center; }
+
+footer p {
+  padding: 0.4em;
+  text-align: center; }
 
 /*# sourceMappingURL=style.css.map */
