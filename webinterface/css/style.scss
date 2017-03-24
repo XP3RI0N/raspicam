@@ -1,4 +1,5 @@
-@import 'variables';
+@import 'colors';
+@import "constants";
 
 * {
 	margin: 0;
@@ -15,12 +16,6 @@ body {
 	background-color: $primary-background-color;
 }
 
-main {
-	flex-grow: 1;
-	width: 960px;
-	margin: 0 auto;
-}
-
 header, footer {
 	color: $title-color;
 	background-color: $secondary-background-color;
@@ -34,7 +29,25 @@ header {
 
 footer {
 	p {
-		padding: 0.4em;
+		padding: 0.4em 0;
 		text-align: center;
 	}
+}
+
+main {
+	flex-grow: 1;
+
+	display: flex;
+	flex-flow: row wrap;
+	max-width: $fullScreenContentWidth;
+	margin: 0 auto;
+}
+
+.controls {
+	width: 336px;
+
+}
+
+.view {
+	margin: 0 2em;
 }
