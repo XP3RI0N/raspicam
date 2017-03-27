@@ -1,0 +1,24 @@
+{
+  "name": "raspicam",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.15.2",
+    "gpio": "^0.2.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XP3RI0N/raspicam.git"
+  },
+  "author": "",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/XP3RI0N/raspicam/issues"
+  },
+  "homepage": "https://github.com/XP3RI0N/raspicam#readme"
+}
