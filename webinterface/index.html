@@ -14,10 +14,12 @@
 <main>
 	<section class="controls">
 		<p>Cam Presets</p>
+		<article class="presets">
 		<button id="pos1" class="btn">Door</button>
 		<button id="pos2" class="btn">Blackboard</button>
 		<button id="pos3" class="btn">Window</button>
 		<button id="pos4" class="btn">Extra</button>
+		</article>
 	</section>
 	<section class="view">
 		<!--http://172.23.49.1/mjpg/video.mjpg-->
@@ -25,9 +27,20 @@
 			 alt="Be sure you are in the same network as your cam, then reload this page."/>
 	</section>
 	<section class="controls">
+		<p>Control Panel</p>
 		<div class="controlPanel">
-			<button id="panLeft">Left</button>
-			<button id="panRight">Right</button>
+			<button id="zoomOut" class="btn"><img src="assets/icons/zoomOut.svg" alt="Zoom out"></button>
+			<button id="focus" class="btn"><img src="assets/icons/focus.svg" alt="Focus"></button>
+			<button id="zoomIn" class="btn"><img src="assets/icons/zoomIn.svg" alt="Zoom in"></button>
+			<button id="upLeft" class="btn"><img src="assets/icons/up.svg" alt="Tilt up and pan left" class="rot45"></button>
+			<button id="up" class="btn"><img src="assets/icons/up.svg" alt="Tilt up"></button>
+			<button id="upRight" class="btn"><img src="assets/icons/up.svg" alt="Tilt up and pan right" class=" rot-45"></button>
+			<button id="left" class="btn"><img src="assets/icons/left.svg" alt="Pan left"></button>
+			<button id="photo" class="btn"><img src="assets/icons/photo.svg" alt="Take a picture"></button>
+			<button id="right" class="btn"><img src="assets/icons/right.svg" alt="Pan right"></button>
+			<button id="downLeft" class="btn"><img src="assets/icons/down.svg" alt="Tilt down and pan left" class="rot-45"></button>
+			<button id="down" class="btn"><img src="assets/icons/down.svg" alt="Tilt down"></button>
+			<button id="downRight" class="btn"><img src="assets/icons/down.svg" alt="Tilt down and pan right" class="rot45"></button>
 		</div>
 	</section>
 

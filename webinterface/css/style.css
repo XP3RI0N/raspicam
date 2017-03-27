@@ -29,16 +29,31 @@ main {
   max-width: 1440px;
   margin: 0 auto; }
 
+.btn {
+  font-size: 1.2rem;
+  width: 100px;
+  height: 50px;
+  padding: 0.5em 0; }
+
 .controls {
   width: 336px; }
+  .controls .presets .btn {
+    width: 100%;
+    margin: 0.5em 0; }
+  .controls .controlPanel {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between; }
+    .controls .controlPanel .btn {
+      margin: 10px 0; }
+      .controls .controlPanel .btn .rot45 {
+        transform: scale(1.4) rotate(315deg); }
+      .controls .controlPanel .btn .rot-45 {
+        transform: scale(1.4) rotate(45deg); }
+      .controls .controlPanel .btn img {
+        transform: scale(1.4); }
 
 .view {
   margin: 0 2em; }
-
-.btn {
-  font-size: 1.4rem;
-  width: 100%;
-  margin: 0.5em 0;
-  padding: 0.5rem 0; }
 
 /*# sourceMappingURL=style.css.map */
