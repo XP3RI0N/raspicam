@@ -25,6 +25,7 @@ header, footer {
 header {
 	h1 {
 		text-align: center;
+		padding: 0.4em 0;
 	}
 }
 
@@ -42,6 +43,7 @@ main {
 	flex-flow: row wrap;
 	max-width: $fullScreenContentWidth;
 	margin: 0 auto;
+	padding-top: 2em;
 }
 
 .btn {
@@ -56,6 +58,7 @@ main {
 	width: 315px;
 
 	p {
+		font-size: 1.4rem;
 		text-align: center;
 		text-decoration: underline;
 	}

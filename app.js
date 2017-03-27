@@ -27,8 +27,6 @@ lcd.on('ready', function() {
 process.on('SIGINT', function() {
 	lcd.clear();
 
-	lcd.once("cleared", function () {
-		lcd.close();
-		process.exit();
-	})
+	lcd.close();
+	process.exit();
 });
