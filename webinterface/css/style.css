@@ -1,7 +1,7 @@
 * {
   margin: 0;
   padding: 0;
-  font-family: "Ubuntu", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  font-family: "ubuntu"; }
 
 body {
   position: absolute;
@@ -39,6 +39,6 @@ main {
   font-size: 1.4rem;
   width: 100%;
   margin: 0.5em 0;
-  padding: 0.5rem; }
+  padding: 0.5rem 0; }
 
 /*# sourceMappingURL=style.css.map */
