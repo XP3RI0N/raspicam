@@ -16,8 +16,10 @@ lcd.on('ready', function() {
 	setInterval(function() {
 		lcd.setCursor(0, 0);
 		lcd.print(new Date().toString().substring(16, 24));
-		lcd.setCursor(0, 1);
-		lcd.print("Push the button");
+		lcd.once("printed", function() {
+			lcd.setCursor(0, 1);
+			lcd.print("Push the button");
+		})
 	}, 1000);
 });
 
