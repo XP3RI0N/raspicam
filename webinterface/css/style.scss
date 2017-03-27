@@ -46,14 +46,19 @@ main {
 
 .btn {
 	font-size: 1.2rem;
-	width: 100px;
-	height: 50px;
+	width: 85px;
+	height: 85px;
 	padding: 0.5em 0;
 }
 
 
 .controls {
 	width: 336px;
+
+	p {
+		text-align: center;
+		text-decoration: underline;
+	}
 
 	.presets {
 		.btn {
@@ -65,7 +70,7 @@ main {
 	.controlPanel {
 		display: flex;
 		flex-flow: row wrap;
-		justify-content: space-between;
+		justify-content: space-around;
 
 		.btn {
 			margin: 10px 0;

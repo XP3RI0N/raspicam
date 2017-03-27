@@ -31,19 +31,22 @@ main {
 
 .btn {
   font-size: 1.2rem;
-  width: 100px;
-  height: 50px;
+  width: 85px;
+  height: 85px;
   padding: 0.5em 0; }
 
 .controls {
   width: 336px; }
+  .controls p {
+    text-align: center;
+    text-decoration: underline; }
   .controls .presets .btn {
     width: 100%;
     margin: 0.5em 0; }
   .controls .controlPanel {
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-between; }
+    justify-content: space-around; }
     .controls .controlPanel .btn {
       margin: 10px 0; }
       .controls .controlPanel .btn .rot45 {
