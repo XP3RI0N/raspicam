@@ -2,7 +2,6 @@
 // var gpio = require('gpio');
 
 var Lcd = require('lcd'),
-
 	lcd = new Lcd({
 		rs: 20,
 		e: 16,
