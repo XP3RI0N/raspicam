@@ -1,14 +1,14 @@
 // var express = require('express');
 
 var gpio = require('gpio');
-var gpio4 = gpio.export(4, {
+var gpio5 = gpio.export(5, {
 	direction: "in",
 	ready: function() {
-		console.log("gpio 4 ready")
+		console.log("gpio 5 ready")
 	}
 });
 
-gpio4.on("change", function(val) {
+gpio5.on("change", function(val) {
 	// value will report either 1 or 0 (number) when the value changes
 	console.log(val)
 });
