@@ -48,13 +48,19 @@ lcd = new Lcd({
 });
 
 lcd.on('ready', function () {
+	var d = new Date();
+	var monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
 	console.log("lcd ready");
 	setInterval(function () {
 		lcd.setCursor(0, 0);
-		lcd.print(new Date().toString().substring(16, 24));
+		lcd.print(d.toString().substring(16, 24));
 		lcd.once("printed", function () {
 			lcd.setCursor(0, 1);
-			lcd.print("Push the button");
+			// lcd.print("Push the button");
+			lcd.print(d.getDate().toString() + " " + monthNames[d.getMonth()] + " " + d.getFullYear().toString());
 		})
 	}, 1000);
 });
@@ -106,4 +112,3 @@ function moveCamToPreset(presetID) {
 		}
 	})
 }
-
