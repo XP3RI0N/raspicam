@@ -13,9 +13,6 @@ gpio5.on("change", function(val) {
 	console.log(val)
 });
 
-
-
-
 var Lcd = require('lcd'),
 	lcd = new Lcd({
 		rs: 20,
@@ -39,8 +36,8 @@ lcd.on('ready', function() {
 
 // If ctrl+c is hit, free resources and exit.
 process.on('SIGINT', function() {
-	lcd.clear();
+	lcd.clear(lcd.close(process.exit));
 
-	lcd.close();
-	process.exit();
+	//lcd.close();
+	//process.exit();
 });
