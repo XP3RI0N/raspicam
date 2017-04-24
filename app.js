@@ -91,9 +91,10 @@ function moveCamToPreset(presetID) {
 
 
 // webserver
-var app    = require('express')();
-var server = require('http').Server(app);
-var io     = require('socket.io')(server);
+var express = require('express');
+var app     = express();
+var server  = require('http').Server(app);
+var io      = require('socket.io')(server);
 
 server.listen(80);
 
