@@ -7,7 +7,8 @@
     "express": "^4.15.2",
     "gpio": "^0.2.7",
     "lcd": "^1.1.4",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "socket.io": "^1.7.3"
   },
   "devDependencies": {},
   "scripts": {
