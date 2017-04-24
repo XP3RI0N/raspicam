@@ -26,27 +26,21 @@ var nsIPCam = {
 	},
 
 	initButtons: function () {
-		document.getElementById("left").addEventListener("click", nsIPCam.panLeft);
-		document.getElementById("right").addEventListener("click", nsIPCam.panRight);
+		document.getElementById("left").addEventListener("click", function () {
+			nsIPCam.moveCam("left");
+		});
+		document.getElementById("right").addEventListener("click", function () {
+			nsIPCam.moveCam("right");
+		});
 	},
 
 
+	moveCam: function (move) {
 
-
-
-	// 1 functie met parameters é, wat dacht ik wel...
-	panLeft: function () {
-		console.log("panLeft");
+		// http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&move=right
+		console.log(move);
 		nsUtils.ajax("http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&pan=10", function () {
 
 		});
-	},
-
-	panRight   : function () {
-		console.log("panRight");
-		nsUtils.ajax("http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&pan=-10", function () {
-
-		});
 	}
-
 }

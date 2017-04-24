@@ -14,7 +14,10 @@ var nsUtils = {
 				}
 			}
 		};
-		httpRequest.open("GET", url);
+		httpRequest.open("GET", url, true, "student", "vandeweek");
+
+		httpRequest.setRequestHeader("Access-Control-Allow-Origin", "http://localhost:63342");
+
 		httpRequest.send();
 	},
 
