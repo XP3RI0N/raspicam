@@ -36,7 +36,12 @@ lcd.on('ready', function() {
 
 // If ctrl+c is hit, free resources and exit.
 process.on('SIGINT', function() {
-	lcd.clear(lcd.close(process.exit));
+	lcd.clear(
+		function () {
+			lcd.close(function () {
+				process.exit();
+			});
+		}
 
 	//lcd.close();
 	//process.exit();
