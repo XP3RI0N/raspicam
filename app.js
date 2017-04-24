@@ -2,6 +2,24 @@ var request = require('request');
 var gpio    = require('gpio');
 var Lcd     = require('lcd');
 
+// webserver
+var express = require('express');
+var app     = express();
+var server  = require('http').Server(app);
+var io      = require('socket.io')(server);
+
+server.listen(8080);
+
+app.use(express.static('webinterface'));
+
+io.on('connection', function (socket) {
+	socket.emit('news', { hello: 'world' });
+	socket.on('my other event', function (data) {
+		console.log(data);
+	});
+});
+
+
 // var express = require('express');
 
 // GPIO
@@ -16,7 +34,7 @@ gpio5.on("change", function (val) {
 	// value will report either 1 or 0 (number) when the value changes
 	console.log(val)
 	if (val === 1) {
-		moveCam();
+		moveCam("home");
 	}
 });
 
@@ -89,20 +107,3 @@ function moveCamToPreset(presetID) {
 	})
 }
 
-
-// webserver
-var express = require('express');
-var app     = express();
-var server  = require('http').Server(app);
-var io      = require('socket.io')(server);
-
-server.listen(8080);
-
-app.use(express.static('webinterface'));
-
-io.on('connection', function (socket) {
-	socket.emit('news', { hello: 'world' });
-	socket.on('my other event', function (data) {
-		console.log(data);
-	});
-});
