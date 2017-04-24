@@ -1,12 +1,11 @@
 var request = require('request');
 var gpio    = require('gpio');
-var Lcd     = require('lcd'),
+var Lcd     = require('lcd');
 
-	// var express = require('express');
+// var express = require('express');
 
-	// GPIO
-var
-gpio5       = gpio.export(5, {
+// GPIO
+var gpio5 = gpio.export(5, {
 	direction: "in",
 	ready    : function () {
 		console.log("gpio 5 ready")
@@ -72,7 +71,7 @@ function moveCam(move) {
 };
 
 function moveCamToPreset(presetID) {
-	if(!presetID)
+	if (!presetID)
 		return;
 
 	var preset = presets[presetID - 1];
@@ -91,11 +90,10 @@ function moveCamToPreset(presetID) {
 }
 
 
-
 // webserver
-var app = require('express')();
+var app    = require('express')();
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
+var io     = require('socket.io')(server);
 
 server.listen(80);
 
