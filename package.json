@@ -5,7 +5,9 @@
   "main": "app.js",
   "dependencies": {
     "express": "^4.15.2",
-    "gpio": "^0.2.7"
+    "gpio": "^0.2.7",
+    "lcd": "^1.1.4",
+    "request": "^2.81.0"
   },
   "devDependencies": {},
   "scripts": {
