@@ -48,13 +48,13 @@ lcd = new Lcd({
 });
 
 lcd.on('ready', function () {
-	var d = new Date();
 	var monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
 	console.log("lcd ready");
 	setInterval(function () {
+		var d = new Date();
 		lcd.setCursor(0, 0);
 		lcd.print(d.toString().substring(16, 24));
 		lcd.once("printed", function () {
