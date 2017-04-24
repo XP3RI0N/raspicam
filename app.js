@@ -1,7 +1,12 @@
-// var express = require('express');
+var request = require('request');
+var gpio    = require('gpio');
+var Lcd     = require('lcd'),
 
-var gpio  = require('gpio');
-var gpio5 = gpio.export(5, {
+	// var express = require('express');
+
+	// GPIO
+var
+gpio5       = gpio.export(5, {
 	direction: "in",
 	ready    : function () {
 		console.log("gpio 5 ready")
@@ -16,14 +21,14 @@ gpio5.on("change", function (val) {
 	}
 });
 
-var Lcd = require('lcd'),
-	lcd = new Lcd({
-		rs  : 20,
-		e   : 16,
-		data: [6, 13, 19, 26],
-		cols: 16,
-		rows: 2
-	});
+// LCD
+lcd = new Lcd({
+	rs  : 20,
+	e   : 16,
+	data: [6, 13, 19, 26],
+	cols: 16,
+	rows: 2
+});
 
 lcd.on('ready', function () {
 	console.log("lcd ready");
@@ -46,16 +51,14 @@ process.on('SIGINT', function () {
 			});
 		}
 	);
-
-	//lcd.close();
-	//process.exit();
 });
 
 
-function moveCam() {
-	var request = require('request');
+function moveCam(move) {
+	if (!move)
+		return;
 
-	request("http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&pan=10", {
+	request("http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&move=" + move, {
 		'auth': {
 			'user'           : 'student',
 			'pass'           : 'vandeweek',
@@ -63,7 +66,26 @@ function moveCam() {
 		}
 	}, function (error, response, body) {
 		if (body) {
-			console.log("Fout: " + body);
+			console.log("Error: " + body);
 		}
 	})
 };
+
+function moveCamToPreset(presetID) {
+	if(!presetID)
+		return;
+
+	var preset = presets[presetID - 1];
+
+	request("http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&pan=" + preset.pan + "&tilt=" + preset.tilt + "&zoom=" + preset.zoom, {
+		'auth': {
+			'user'           : 'student',
+			'pass'           : 'vandeweek',
+			'sendImmediately': false
+		}
+	}, function (error, response, body) {
+		if (body) {
+			console.log("Error: " + body);
+		}
+	})
+}
