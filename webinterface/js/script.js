@@ -13,11 +13,11 @@ var nsIPCam = {
 	initPresets: function () {
 		var parent = document.getElementById("presets");
 		for (var i = 0, len = presets.length; i < len; i++ ) {
-			console.log(presets[i].Name);
+			console.log(presets[i].name);
 			var button = document.createElement("button");
-			button.id = "preset" + presets[i].Id;
+			button.id = "preset" + presets[i].id;
 			button.className = "btn";
-			button.innerHTML = presets[i].Name;
+			button.innerHTML = presets[i].name;
 
 			// event listener toevoegen
 
