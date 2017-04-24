@@ -1,5 +1,20 @@
 // var express = require('express');
-// var gpio = require('gpio');
+
+var gpio = require('gpio');
+var gpio4 = gpio.export(4, {
+	direction: "in",
+	ready: function() {
+		console.log("gpio 4 ready")
+	}
+});
+
+gpio4.on("change", function(val) {
+	// value will report either 1 or 0 (number) when the value changes
+	console.log(val)
+});
+
+
+
 
 var Lcd = require('lcd'),
 	lcd = new Lcd({
