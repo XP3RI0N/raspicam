@@ -49,7 +49,7 @@ lcd = new Lcd({
 
 lcd.on('ready', function () {
 	var monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+  "July", "August", "Septembr", "October", "November", "December"
 ];
 
 	console.log("lcd ready");
