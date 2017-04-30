@@ -1,8 +1,11 @@
-var request = require('request');
+
+/*
 var gpio    = require('gpio');
 var Lcd     = require('lcd');
+*/
 
 // webserver
+var request = require('request');
 var express = require('express');
 var app     = express();
 var server  = require('http').Server(app);
@@ -13,15 +16,41 @@ server.listen(8080);
 app.use(express.static('webinterface'));
 
 io.on('connection', function (socket) {
-	socket.emit('news', { hello: 'world' });
-	socket.on('my other event', function (data) {
-		console.log(data);
-	});
+
+
+	socket.on('command', function (msg) {
+
+		console.log(msg);
+
+		if (msg.command === "move") {
+			moveCam(msg.param);
+		} else if (msg.command === "preset") {
+			moveCamToPreset(msg.param);
+		}
+
+		/*
+		switch(msg) {
+			case n:
+
+				break;
+			case n:
+
+				break;
+		}
+*/
+
+	})
+
+
+
+
 });
 
 
-// var express = require('express');
 
+
+/*
+//<editor-fold desc="pi hardware">
 // GPIO
 var gpio5 = gpio.export(5, {
 	direction: "in",
@@ -75,7 +104,8 @@ process.on('SIGINT', function () {
 		}
 	);
 });
-
+//</editor-fold>
+*/
 
 function moveCam(move) {
 	if (!move)
@@ -98,7 +128,10 @@ function moveCamToPreset(presetID) {
 	if (!presetID)
 		return;
 
+	var presets = require('./webinterface/js/presets.js').list;
 	var preset = presets[presetID - 1];
+
+	console.log(preset);
 
 	request("http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&pan=" + preset.pan + "&tilt=" + preset.tilt + "&zoom=" + preset.zoom, {
 		'auth': {
@@ -111,4 +144,5 @@ function moveCamToPreset(presetID) {
 			console.log("Error: " + body);
 		}
 	})
+
 }

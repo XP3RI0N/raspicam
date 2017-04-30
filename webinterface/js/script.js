@@ -4,43 +4,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
 var nsIPCam = {
 	init: function () {
-		console.log("ipcam init");
-
 		nsIPCam.initPresets();
 		nsIPCam.initButtons();
 	},
 
 	initPresets: function () {
 		var parent = document.getElementById("presets");
-		for (var i = 0, len = presets.length; i < len; i++ ) {
-			console.log(presets[i].name);
-			var button = document.createElement("button");
-			button.id = "preset" + presets[i].id;
+		for (var i = 0, len = presets.length; i < len; i++) {
+			var button       = document.createElement("button");
+			button.id        = "preset" + presets[i].id;
 			button.className = "btn";
 			button.innerHTML = presets[i].name;
 
 			// event listener toevoegen
+			button.addEventListener("click", function () {
+				nsIPCam.sendCommand({ command: "preset", param: parseInt(this.id.split("t")[1]) });
+			})
 
 			parent.appendChild(button);
 		}
 	},
 
 	initButtons: function () {
-		document.getElementById("left").addEventListener("click", function () {
-			nsIPCam.moveCam("left");
-		});
-		document.getElementById("right").addEventListener("click", function () {
-			nsIPCam.moveCam("right");
-		});
+		var buttons = document.querySelectorAll(".controlPanel > button")
+
+		for (var i = 0, len = buttons.length; i < len; i++) {
+			buttons[i].addEventListener("click", function () {
+				nsIPCam.sendCommand({ command: "move", param: this.id });
+			})
+		}
 	},
 
-
-	moveCam: function (move) {
-
-		// http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&move=right
-		console.log(move);
-		nsUtils.ajax("http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&pan=10", function () {
-
-		});
+	sendCommand: function (command) {
+		var socket = io();
+		socket.emit("command", command);
 	}
+
+
 }
