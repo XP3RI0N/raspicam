@@ -1,4 +1,5 @@
 var gpio = require('gpio');
+var gpio = require('gpio');
 var Lcd = require('lcd');
 
 
