@@ -1,7 +1,7 @@
 var gpio = require('gpio');
 var gpio = require('gpio');
 var Lcd = require('lcd');
-
+var glob = require("glob");
 
 // webserver
 var request = require('request');
@@ -17,6 +17,11 @@ var monthNames = ["January", "February", "March", "April", "May", "June",
 server.listen(8080);
 
 app.use(express.static('webinterface'));
+app.get("/imagelist", function (req, res) {
+	glob("webinterface/images/*.jpg", function (err, files) {
+		res.send(JSON.stringify(files || []));
+	});
+});
 
 io.on('connection', function (socket) {
 
@@ -200,8 +205,9 @@ function savePicture() {
 
 		response.on('end', function() {
 			var d = new Date(),
-				fileName = "raspicam_" + ((d.getMonth() < 10) ? '0' + d.getMonth() : d.getMonth()) + ((d.getDate() < 10) ? '0' +d.getDate() : d.getDate()) + d.getFullYear() + ".jpg";
-			console.log("Raspicam: " + fileName + " saved\n");
+				fileName = "raspicam_" + ((d.getMonth() < 10) ? '0' + d.getMonth() : d.getMonth()) + ((d.getDate() < 10) ? '0' +d.getDate() : d.getDate()) + d.getFullYear() + "_time" + ((d.getHours() < 10) ? '0' + d.getHours() : d.getHours()) + ((d.getMinutes() < 10) ? '0' + d.getMinutes() : d.getMinutes()) + ((d.getSeconds() < 10) ? '0' + d.getSeconds() : d.getSeconds()) + ".jpg";
+
+			console.log("Raspicam: " + fileName + "saved");
 			fs.writeFileSync('./webinterface/images/' + fileName, data.read());
 		});
 	}).end();
