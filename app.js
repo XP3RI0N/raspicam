@@ -10,6 +10,10 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+var monthNames = ["January", "February", "March", "April", "May", "June",
+	"July", "August", "Septembr", "October", "November", "December"
+];
+
 server.listen(8080);
 
 app.use(express.static('webinterface'));
@@ -17,74 +21,104 @@ app.use(express.static('webinterface'));
 io.on('connection', function (socket) {
 
 
-    socket.on('command', function (msg) {
+	socket.on('command', function (msg) {
 
-        console.log(msg);
+		console.log(msg);
 
-        if (msg.command === "move") {
-            moveCam(msg.param);
-        } else if (msg.command === "preset") {
-            moveCamToPreset(msg.param);
-        }
-    })
+		if (msg.command === "move") {
+			moveCam(msg.param);
+		} else if (msg.command === "preset") {
+			moveCamToPreset(msg.param);
+		}
+	})
 });
 
 //<editor-fold desc="pi hardware">
 // GPIO
 var gpio5 = gpio.export(5, {
-    direction: "in",
-    ready: function () {
-        console.log("GPIO 5 - ready")
-    }
+	direction: "in",
+	ready: function () {
+		console.log("GPIO 5 - ready")
+	}
 });
 
-gpio5.on("change", function (val) {
-    // value will report either 1 or 0 (number) when the value changes
-    // console.log(val);
-    if (val === 1) {
-        moveCam("home");
-        console.log("... DONG!");
-    } else {
-        console.log("DING ...")
-    }
-});
+// gpio5.on("change", function (val) {
+// 	// value will report either 1 or 0 (number) when the value changes
+// 	// console.log(val);
+// 	if (val === 1) {
+// 		moveCam("home");
+// 		//console.log("DONG!");
+// 		console.log("You've got company!");
+// 		lcd.clear();
+// 		lcd.setCursor(0, 0);
+// 		lcd.print("Access granted");
+// 	} else {
+// 		console.log("DING DONG!");
+// 	}
+// });
 
 // LCD
 lcd = new Lcd({
-    rs: 20,
-    e: 16,
-    data: [6, 13, 19, 26],
-    cols: 16,
-    rows: 2
+	rs: 20,
+	e: 16,
+	data: [6, 13, 19, 26],
+	cols: 16,
+	rows: 2
 });
 
 lcd.on('ready', function () {
-    var monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "Septembr", "October", "November", "December"
-    ];
+	console.log("LCD - ready");
 
-    console.log("LCD - ready");
-    setInterval(function () {
-        var d = new Date();
-        lcd.setCursor(0, 0);
-        lcd.print(d.toString().substring(16, 24));
-        lcd.once("printed", function () {
-            lcd.setCursor(0, 1);
-            // lcd.print("Push the button");
-            lcd.print(d.getDate().toString() + " " + monthNames[d.getMonth()] + " " + d.getFullYear().toString());
-        })
-    }, 1000);
+	// displayDateTime (Every second), cameraScan
+	// Button pushed, stop displayDateTime
+	// displayWelcomeMessage, moveCamToHome
+	// takeScreenshot
+	// Wait (5 seconds)
+	// displayDateTime (Every second), cameraScan
+
+	var v = gpio5.on("change", function (val) {return val});
+
+	setInterval(function () {
+		displayDateTime();
+		console.log(v.value);
+		if (v.value === 1) {
+			displayWelcomeAndMoveCamHome();
+			console.log("Ding-test-dong");
+		}
+	}, 1000);
 });
+
+function displayWelcomeAndMoveCamHome() {
+	console.log("DING DONG!");
+	moveCam("home");
+	//console.log("DONG!");
+	console.log("You've got company!");
+	lcd.clear();
+	lcd.setCursor(0, 0);
+	lcd.print("Access granted");
+}
+
+function displayDateTime() {
+	var d = new Date();
+	lcd.clear();
+	lcd.setCursor(0, 0);
+	lcd.print(d.toString().substring(16, 24));
+	lcd.once("printed", function () {
+		lcd.setCursor(0, 1);
+		lcd.print(d.getDate().toString() + " " + monthNames[d.getMonth()] + " " + d.getFullYear().toString());
+	});
+}
+
 
 // If ctrl+c is hit, free resources and exit.
 process.on('SIGINT', function () {
-    lcd.clear(
-        function () {
-            lcd.close(function () {
-                process.exit();
-            });
-        }
-    );
+	lcd.clear(
+		function () {
+			lcd.close(function () {
+				process.exit();
+			});
+		}
+	);
 });
 //</editor-fold>
 
@@ -95,7 +129,7 @@ function moveCam(move) {
 	move = move.toLowerCase();
 
 	var url;
-	switch(move) {
+	switch (move) {
 		case "zoomin":
 			url = "http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&rzoom=1000&autofocus=on";
 			break;
@@ -108,8 +142,8 @@ function moveCam(move) {
 
 	request(url, {
 		'auth': {
-			'user'           : 'student',
-			'pass'           : 'tasjekoffie',
+			'user': 'student',
+			'pass': 'tasjekoffie',
 			'sendImmediately': false
 		}
 	}, function (error, response, body) {
@@ -130,8 +164,8 @@ function moveCamToPreset(presetID) {
 
 	request("http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&pan=" + preset.pan + "&tilt=" + preset.tilt + "&zoom=" + preset.zoom + "&autofocus=on", {
 		'auth': {
-			'user'           : 'student',
-			'pass'           : 'tasjekoffie',
+			'user': 'student',
+			'pass': 'tasjekoffie',
 			'sendImmediately': false
 		}
 	}, function (error, response, body) {
