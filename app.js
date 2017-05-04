@@ -22,7 +22,7 @@ app.get("/imagelist", function (req, res) {
 		files = files || [];
 
 		for (var i = 0 , len = files.length; i< len; i++) {
-			files[i] = files[i].substr(files[i].indexOf("/"));
+			files[i] = files[i].substr(files[i].indexOf("/") + 1);
 		}
 
 		res.send(JSON.stringify(files));

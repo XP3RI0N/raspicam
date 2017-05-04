@@ -56,7 +56,7 @@ var nsIPCam = {
 		nsUtils.ajax("./imagelist", function (imageArray) {
 			for (var i = 0, len = imageArray.length; i < len; i++) {
 				var img    = document.createElement("img");
-				img.source = imageArray[i];
+				img.src = imageArray[i];
 				sec.appendChild(img);
 			}
 
