@@ -79,17 +79,28 @@ lcd.on('ready', function () {
 	// takeScreenshot
 	// Wait (5 seconds)
 	// displayDateTime (Every second), cameraScan
+	
+	var fokDeNaam, fokDeBanaan;
 
-	var v = gpio5.on("change", function (val) {console.log(val)});
+	var v = gpio5.on("change", function (val) {
+		console.log(val);
 
-	setInterval(function () {
-		displayDateTime();
-		console.log(v.value);
 		if (v.value === 1) {
+			fokDeNaam = false;
+
 			displayWelcomeAndMoveCamHome();
 			console.log("Ding-test-dong");
 
+			clearTimeout(fokDeBanaan);
+			fokDeBanaan = setTimeout(function () {
+				fokDeNaam = true;
+			}, 3000);
 		}
+	});
+
+	setInterval(function () {
+		if (fokDeNaam)
+			displayDateTime();
 	}, 1000);
 });
 
