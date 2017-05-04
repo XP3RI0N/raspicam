@@ -48,7 +48,8 @@ gpio5.on("change", function (val) {
 		setInterval(function () {
 			lcd.setCursor(0, 0);
 			lcd.print("Access granted");
-		} , 2500);
+		} , 5000);
+		lcd.clear();
 	} else {
 		console.log("DING DONG!")
 	}
