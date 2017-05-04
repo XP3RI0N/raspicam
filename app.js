@@ -9,6 +9,10 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+var monthNames = ["January", "February", "March", "April", "May", "June",
+	"July", "August", "Septembr", "October", "November", "December"
+];
+
 server.listen(8080);
 
 app.use(express.static('webinterface'));
@@ -45,13 +49,10 @@ gpio5.on("change", function (val) {
 		//console.log("DONG!");
 		console.log("You've got company!");
 		lcd.clear();
-		setInterval(function () {
-			lcd.setCursor(0, 0);
-			lcd.print("Access granted");
-		} , 5000);
-		lcd.clear();
+		lcd.setCursor(0, 0);
+		lcd.print("Access granted");
 	} else {
-		console.log("DING DONG!")
+		console.log("DING DONG!");
 	}
 });
 
@@ -65,22 +66,43 @@ lcd = new Lcd({
 });
 
 lcd.on('ready', function () {
-	var monthNames = ["January", "February", "March", "April", "May", "June",
-		"July", "August", "Septembr", "October", "November", "December"
-	];
-
 	console.log("LCD - ready");
+
+	// displayDateTime (Every second), cameraScan
+	// Button pushed, stop displayDateTime
+	// displayWelcomeMessage, moveCamToHome
+	// takeScreenshot
+	// Wait (5 seconds)
+	// displayDateTime (Every second), cameraScan
+
 	setInterval(function () {
-		var d = new Date();
-		lcd.setCursor(0, 0);
-		lcd.print(d.toString().substring(16, 24));
-		lcd.once("printed", function () {
-			lcd.setCursor(0, 1);
-			// lcd.print("Push the button");
-			lcd.print(d.getDate().toString() + " " + monthNames[d.getMonth()] + " " + d.getFullYear().toString());
-		})
+		displayDateTime();
+		if (gpio5.on("change")) {
+			setTimeout(displayWelcomeAndMoveCamHome, 5000);
+		}
 	}, 1000);
 });
+
+function displayWelcomeAndMoveCamHome() {
+	console.log("DING DONG!");
+	moveCam("home");
+	//console.log("DONG!");
+	console.log("You've got company!");
+	lcd.clear();
+	lcd.setCursor(0, 0);
+	lcd.print("Access granted");
+}
+
+function displayDateTime() {
+	var d = new Date();
+	lcd.setCursor(0, 0);
+	lcd.print(d.toString().substring(16, 24));
+	lcd.once("printed", function () {
+		lcd.setCursor(0, 1);
+		lcd.print(d.getDate().toString() + " " + monthNames[d.getMonth()] + " " + d.getFullYear().toString());
+	})
+}
+
 
 // If ctrl+c is hit, free resources and exit.
 process.on('SIGINT', function () {
