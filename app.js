@@ -75,7 +75,7 @@ lcd.on('ready', function () {
 	// Wait (5 seconds)
 	// displayDateTime (Every second), cameraScan
 
-	var v = gpio5.on("change", function (val) {return val});
+	var v = gpio5.on("change", function (val) {console.log(val)});
 
 	setInterval(function () {
 		displayDateTime();
@@ -83,6 +83,7 @@ lcd.on('ready', function () {
 		if (v.value === 1) {
 			displayWelcomeAndMoveCamHome();
 			console.log("Ding-test-dong");
+
 		}
 	}, 1000);
 });
