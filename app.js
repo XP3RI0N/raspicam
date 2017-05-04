@@ -42,7 +42,7 @@ io.on('connection', function (socket) {
 var gpio5 = gpio.export(5, {
 	direction: "in",
 	ready: function () {
-		console.log("GPIO 5 - ready")
+		console.log("Raspicam: GPIO 5 - ready")
 	}
 });
 
@@ -71,7 +71,7 @@ lcd = new Lcd({
 });
 
 lcd.on('ready', function () {
-	console.log("LCD - ready");
+	console.log("Raspicam: LCD is ready");
 
 	// displayDateTime (Every second), cameraScan
 	// Button pushed, stop displayDateTime
@@ -102,7 +102,7 @@ lcd.on('ready', function () {
 });
 
 function displayWelcomeAndMoveCamHome() {
-	console.log("DING DONG! - You've got company!");
+	console.log("Raspicam: DING DONG! - You've got company!");
 	moveCam("home");
 
 	setTimeout(function () {
@@ -114,10 +114,10 @@ function displayWelcomeAndMoveCamHome() {
 
 	if (Math.round(Math.random()) === 1) {
 		lcd.print("Access granted");
-		console.log("Access granted\n");
+		console.log("Raspicam: Access granted\n");
 	} else {
 		lcd.print("Access denied");
-		console.log("Access denied\n");
+		console.log("Raspicam: Access denied\n");
 	}
 }
 
@@ -216,7 +216,7 @@ function savePicture() {
 		response.on('end', function() {
 			var d = new Date(),
 				fileName = "raspicam_" + ((d.getMonth() < 10) ? '0' + d.getMonth() : d.getMonth()) + ((d.getDate() < 10) ? '0' +d.getDate() : d.getDate()) + d.getFullYear() + ".jpg";
-			console.log(fileName);
+			console.log("Raspicam: " + fileName + "saved");
 			fs.writeFileSync('./webinterface/images/' + fileName, data.read());
 		});
 	}).end();
