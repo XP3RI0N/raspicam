@@ -30,7 +30,7 @@ io.on('connection', function (socket) {
 		} else if (msg.command === "preset") {
 			moveCamToPreset(msg.param);
 		}
-	})
+	});
 
 	socket.on('savePicture', function () {
 		savePicture();
@@ -72,7 +72,6 @@ lcd = new Lcd({
 
 lcd.on('ready', function () {
 	console.log("LCD - ready");
-	displayDateTime();
 
 	// displayDateTime (Every second), cameraScan
 	// Button pushed, stop displayDateTime
@@ -81,7 +80,7 @@ lcd.on('ready', function () {
 	// Wait (5 seconds)
 	// displayDateTime (Every second), cameraScan
 
-	var displayFree, displayBusy;
+	var displayFree = true, displayBusy;
 
 	var v = gpio5.on("change", function () {
 		if (v.value === 1) {
@@ -105,6 +104,11 @@ lcd.on('ready', function () {
 function displayWelcomeAndMoveCamHome() {
 	console.log("DING DONG! - You've got company!");
 	moveCam("home");
+
+	setTimeout(function () {
+		savePicture();
+	}, 1500);
+
 	lcd.clear();
 	lcd.setCursor(0, 0);
 
