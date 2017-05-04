@@ -53,7 +53,7 @@ var nsIPCam = {
 	initPictures: function () {
 		var sec = document.getElementById("photos");
 
-		util.ajax("./imagelist", function (imageJson) {
+		nsUtils.ajax("./imagelist", function (imageJson) {
 			var imageArray = JSON.parse(imageJson);
 			for (var i = 0, len = imageArray.length; i < len; i++) {
 				var img    = document.createElement("image");
