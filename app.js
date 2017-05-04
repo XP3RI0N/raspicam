@@ -88,7 +88,21 @@ function moveCam(move) {
 	if (!move)
 		return;
 
-	request("http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&move=" + move, {
+	move = move.toLowerCase();
+
+	var url;
+	switch(move) {
+		case "zoomin":
+			url = "http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&rzoom=1000&autofocus=on";
+			break;
+		case "zoomout":
+			url = "http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&rzoom=-1000&autofocus=on";
+			break;
+		default:
+			url = "http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&move=" + move + "&autofocus=on";
+	}
+
+	request(url, {
 		'auth': {
 			'user'           : 'student',
 			'pass'           : 'tasjekoffie',
@@ -110,7 +124,7 @@ function moveCamToPreset(presetID) {
 
 	console.log(preset);
 
-	request("http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&pan=" + preset.pan + "&tilt=" + preset.tilt + "&zoom=" + preset.zoom, {
+	request("http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&pan=" + preset.pan + "&tilt=" + preset.tilt + "&zoom=" + preset.zoom + "&autofocus=on", {
 		'auth': {
 			'user'           : 'student',
 			'pass'           : 'tasjekoffie',

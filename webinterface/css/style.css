@@ -58,6 +58,10 @@ main {
         transform: scale(1.4) rotate(45deg); }
       .controls .controlPanel .btn img {
         transform: scale(1.4); }
+      .controls .controlPanel .btn.large {
+        width: 136px; }
+    .controls .controlPanel div {
+      padding: 0; }
 
 .view {
   margin: 0 2em; }

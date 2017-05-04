@@ -88,6 +88,15 @@ main {
 			img {
 				transform: scale(1.4);
 			}
+
+			&.large {
+				width: 136px;
+			}
+
+		}
+
+		div {
+			padding: 0;
 		}
 	}
 }
