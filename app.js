@@ -84,13 +84,10 @@ lcd.on('ready', function () {
 	var displayFree, displayBusy;
 
 	var v = gpio5.on("change", function () {
-		// console.log(val);
-
 		if (v.value === 1) {
 			displayFree = false;
 
 			displayWelcomeAndMoveCamHome();
-			console.log("Ding-test-dong");
 
 			clearTimeout(displayBusy);
 			displayBusy = setTimeout(function () {
@@ -106,13 +103,18 @@ lcd.on('ready', function () {
 });
 
 function displayWelcomeAndMoveCamHome() {
-	console.log("DING DONG!");
+	console.log("DING DONG! - You've got company!");
 	moveCam("home");
-	//console.log("DONG!");
-	console.log("You've got company!");
 	lcd.clear();
 	lcd.setCursor(0, 0);
-	lcd.print("Access granted");
+
+	if (Math.round(Math.random()) === 1) {
+		lcd.print("Access granted");
+		console.log("Access granted\n");
+	} else {
+		lcd.print("Access denied");
+		console.log("Access denied\n");
+	}
 }
 
 function displayDateTime() {
