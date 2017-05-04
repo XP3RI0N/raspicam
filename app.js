@@ -1,8 +1,6 @@
-
-/*
 var gpio    = require('gpio');
 var Lcd     = require('lcd');
-*/
+
 
 // webserver
 var request = require('request');
@@ -27,29 +25,9 @@ io.on('connection', function (socket) {
 		} else if (msg.command === "preset") {
 			moveCamToPreset(msg.param);
 		}
-
-		/*
-		switch(msg) {
-			case n:
-
-				break;
-			case n:
-
-				break;
-		}
-*/
-
 	})
-
-
-
-
 });
 
-
-
-
-/*
 //<editor-fold desc="pi hardware">
 // GPIO
 var gpio5 = gpio.export(5, {
@@ -105,7 +83,6 @@ process.on('SIGINT', function () {
 	);
 });
 //</editor-fold>
-*/
 
 function moveCam(move) {
 	if (!move)
@@ -114,7 +91,7 @@ function moveCam(move) {
 	request("http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&move=" + move, {
 		'auth': {
 			'user'           : 'student',
-			'pass'           : 'vandeweek',
+			'pass'           : 'tasjekoffie',
 			'sendImmediately': false
 		}
 	}, function (error, response, body) {
@@ -136,7 +113,7 @@ function moveCamToPreset(presetID) {
 	request("http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&pan=" + preset.pan + "&tilt=" + preset.tilt + "&zoom=" + preset.zoom, {
 		'auth': {
 			'user'           : 'student',
-			'pass'           : 'vandeweek',
+			'pass'           : 'tasjekoffie',
 			'sendImmediately': false
 		}
 	}, function (error, response, body) {
