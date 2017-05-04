@@ -66,4 +66,9 @@ main {
 .view {
   margin: 0 2em; }
 
+#photos {
+  width: 100%;
+  height: 200px;
+  background-color: #888; }
+
 /*# sourceMappingURL=style.css.map */
