@@ -99,12 +99,13 @@ function displayWelcomeAndMoveCamHome() {
 
 function displayDateTime() {
 	var d = new Date();
+	lcd.clear();
 	lcd.setCursor(0, 0);
 	lcd.print(d.toString().substring(16, 24));
 	lcd.once("printed", function () {
 		lcd.setCursor(0, 1);
 		lcd.print(d.getDate().toString() + " " + monthNames[d.getMonth()] + " " + d.getFullYear().toString());
-	})
+	});
 }
 
 
