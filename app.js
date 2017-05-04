@@ -79,8 +79,10 @@ lcd.on('ready', function () {
 
 	setInterval(function () {
 		displayDateTime();
+		console.log(v);
 		if (v === 1) {
 			displayWelcomeAndMoveCamHome();
+			console.log("Ding-test-dong");
 		}
 	}, 1000);
 });
