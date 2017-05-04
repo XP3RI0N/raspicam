@@ -41,20 +41,20 @@ var gpio5 = gpio.export(5, {
 	}
 });
 
-gpio5.on("change", function (val) {
-	// value will report either 1 or 0 (number) when the value changes
-	// console.log(val);
-	if (val === 1) {
-		moveCam("home");
-		//console.log("DONG!");
-		console.log("You've got company!");
-		lcd.clear();
-		lcd.setCursor(0, 0);
-		lcd.print("Access granted");
-	} else {
-		console.log("DING DONG!");
-	}
-});
+// gpio5.on("change", function (val) {
+// 	// value will report either 1 or 0 (number) when the value changes
+// 	// console.log(val);
+// 	if (val === 1) {
+// 		moveCam("home");
+// 		//console.log("DONG!");
+// 		console.log("You've got company!");
+// 		lcd.clear();
+// 		lcd.setCursor(0, 0);
+// 		lcd.print("Access granted");
+// 	} else {
+// 		console.log("DING DONG!");
+// 	}
+// });
 
 // LCD
 lcd = new Lcd({
@@ -75,9 +75,11 @@ lcd.on('ready', function () {
 	// Wait (5 seconds)
 	// displayDateTime (Every second), cameraScan
 
+	var v = gpio5.on("change", function (val) {return val});
+
 	setInterval(function () {
 		displayDateTime();
-		if (gpio5.on("change")) {
+		if (v === 1) {
 			setTimeout(displayWelcomeAndMoveCamHome, 5000);
 		}
 	}, 1000);
