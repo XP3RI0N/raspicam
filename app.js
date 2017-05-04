@@ -33,15 +33,16 @@ io.on('connection', function (socket) {
 var gpio5 = gpio.export(5, {
 	direction: "in",
 	ready    : function () {
-		console.log("gpio 5 ready")
+		console.log("GPIO 5 - ready")
 	}
 });
 
 gpio5.on("change", function (val) {
 	// value will report either 1 or 0 (number) when the value changes
-	console.log(val)
+	console.log(val);
 	if (val === 1) {
 		moveCam("home");
+		console.log("DING DONG!");
 	}
 });
 
@@ -59,7 +60,7 @@ lcd.on('ready', function () {
   "July", "August", "Septembr", "October", "November", "December"
 ];
 
-	console.log("lcd ready");
+	console.log("LCD - ready");
 	setInterval(function () {
 		var d = new Date();
 		lcd.setCursor(0, 0);
