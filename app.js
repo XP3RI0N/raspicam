@@ -44,8 +44,11 @@ gpio5.on("change", function (val) {
 		moveCam("home");
 		//console.log("DONG!");
 		console.log("You've got company!");
-		lcd.setCursor(0, 0);
-		lcd.print("Access granted");
+		lcd.clear();
+		setInterval(function () {
+			lcd.setCursor(0, 0);
+			lcd.print("Access granted");
+		} , 2500);
 	} else {
 		console.log("DING DONG!")
 	}
