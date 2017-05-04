@@ -1,4 +1,5 @@
 var gpio = require('gpio');
+var gpio = require('gpio');
 var Lcd = require('lcd');
 
 
@@ -29,6 +30,10 @@ io.on('connection', function (socket) {
 		} else if (msg.command === "preset") {
 			moveCamToPreset(msg.param);
 		}
+	})
+
+	socket.on('savePicture', function () {
+		savePicture();
 	})
 });
 
@@ -173,4 +178,30 @@ function moveCamToPreset(presetID) {
 			console.log("Error: " + body);
 		}
 	})
+}
+
+function savePicture() {
+
+	var http = require('http'),
+		Stream = require('stream').Transform,
+		fs = require('fs');
+
+	var url = 'http://student:tasjekoffie@172.23.49.1/axis-cgi/jpg/image.cgi?resolution=320x240%20&camera=1&compression=25';
+
+	http.request(url, function(response) {
+		var data = new Stream();
+
+		response.on('data', function(chunk) {
+			data.push(chunk);
+		});
+
+		response.on('end', function() {
+			var d = new Date(),
+				fileName = "raspicam_" + ((d.getMonth() < 10) ? '0' + d.getMonth() : d.getMonth()) + ((d.getDate() < 10) ? '0' +d.getDate() : d.getDate()) + d.getFullYear() + ".jpg";
+			console.log(fileName);
+			fs.writeFileSync('./webinterface/images/' + fileName, data.read());
+		});
+	}).end();
+
+
 }

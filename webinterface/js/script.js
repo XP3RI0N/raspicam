@@ -33,11 +33,20 @@ var nsIPCam = {
 				nsIPCam.sendCommand({ command: "move", param: this.id });
 			})
 		}
+
+		document.getElementById("photo").addEventListener("click", function () {
+			nsIPCam.savePicture();
+		})
 	},
 
 	sendCommand: function (command) {
 		var socket = io();
 		socket.emit("command", command);
+	},
+
+	savePicture: function () {
+		var socket = io();
+		socket.emit("savePicture");
 	}
 
 
