@@ -19,7 +19,13 @@ server.listen(8080);
 app.use(express.static('webinterface'));
 app.get("/imagelist", function (req, res) {
 	glob("webinterface/images/*.jpg", function (err, files) {
-		res.send(JSON.stringify(files || []));
+		files = files || [];
+
+		for (var i = 0 , len = files.length; i< len; i++) {
+			files[i] = files[i].substr(files[i].indexOf("/"));
+		}
+
+		res.send(JSON.stringify(files));
 	});
 });
 
@@ -222,9 +228,9 @@ function savePicture() {
 			var d = new Date(),
 				fileName = "raspicam_" + ((d.getMonth() < 10) ? '0' + d.getMonth() : d.getMonth()) + ((d.getDate() < 10) ? '0' +d.getDate() : d.getDate()) + d.getFullYear() + "_time" + ((d.getHours() < 10) ? '0' + d.getHours() : d.getHours()) + ((d.getMinutes() < 10) ? '0' + d.getMinutes() : d.getMinutes()) + ((d.getSeconds() < 10) ? '0' + d.getSeconds() : d.getSeconds()) + ".jpg";
 
-			console.log("Raspicam: " + fileName + "saved");
+			console.log("Raspicam: " + fileName + " saved\n");
 
-			fs.writeFileSync('./webinterface/images/' + fileName, data.read());
+			fs.writeFile('./webinterface/images/' + fileName, data.read());
 		});
 	}).end();
 
