@@ -20,7 +20,7 @@ io.on('connection', function (socket) {
 
         console.log(msg);
 
-        if (msg.command === "move") {
+		if (msg.command === "move") {
             moveCam(msg.param);
         } else if (msg.command === "preset") {
             moveCamToPreset(msg.param);
@@ -42,9 +42,14 @@ gpio5.on("change", function (val) {
     // console.log(val);
     if (val === 1) {
         moveCam("home");
-        console.log("... DONG!");
+        //console.log("DONG!");
+		lcd.on('ready', function () {
+			console.log("You've got company!");
+			lcd.setCursor(0, 0);
+			lcd.print("Access granted");
+		});
     } else {
-        console.log("DING ...")
+        console.log("DING DONG!")
     }
 });
 
