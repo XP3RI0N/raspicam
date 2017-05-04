@@ -80,7 +80,7 @@ lcd.on('ready', function () {
 	setInterval(function () {
 		displayDateTime();
 		if (v === 1) {
-			setTimeout(displayWelcomeAndMoveCamHome, 5000);
+			displayWelcomeAndMoveCamHome();
 		}
 	}, 1000);
 });
