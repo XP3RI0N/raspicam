@@ -1,13 +1,13 @@
-var gpio    = require('gpio');
-var Lcd     = require('lcd');
+var gpio = require('gpio');
+var Lcd = require('lcd');
 
 
 // webserver
 var request = require('request');
 var express = require('express');
-var app     = express();
-var server  = require('http').Server(app);
-var io      = require('socket.io')(server);
+var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 server.listen(8080);
 
@@ -16,71 +16,74 @@ app.use(express.static('webinterface'));
 io.on('connection', function (socket) {
 
 
-	socket.on('command', function (msg) {
+    socket.on('command', function (msg) {
 
-		console.log(msg);
+        console.log(msg);
 
-		if (msg.command === "move") {
-			moveCam(msg.param);
-		} else if (msg.command === "preset") {
-			moveCamToPreset(msg.param);
-		}
-	})
+        if (msg.command === "move") {
+            moveCam(msg.param);
+        } else if (msg.command === "preset") {
+            moveCamToPreset(msg.param);
+        }
+    })
 });
 
 //<editor-fold desc="pi hardware">
 // GPIO
 var gpio5 = gpio.export(5, {
-	direction: "in",
-	ready    : function () {
-		console.log("gpio 5 ready")
-	}
+    direction: "in",
+    ready: function () {
+        console.log("GPIO 5 - ready")
+    }
 });
 
 gpio5.on("change", function (val) {
-	// value will report either 1 or 0 (number) when the value changes
-	console.log(val)
-	if (val === 1) {
-		moveCam("home");
-	}
+    // value will report either 1 or 0 (number) when the value changes
+    // console.log(val);
+    if (val === 1) {
+        moveCam("home");
+        console.log("... DONG!");
+    } else {
+        console.log("DING ...")
+    }
 });
 
 // LCD
 lcd = new Lcd({
-	rs  : 20,
-	e   : 16,
-	data: [6, 13, 19, 26],
-	cols: 16,
-	rows: 2
+    rs: 20,
+    e: 16,
+    data: [6, 13, 19, 26],
+    cols: 16,
+    rows: 2
 });
 
 lcd.on('ready', function () {
-	var monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "Septembr", "October", "November", "December"
-];
+    var monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "Septembr", "October", "November", "December"
+    ];
 
-	console.log("lcd ready");
-	setInterval(function () {
-		var d = new Date();
-		lcd.setCursor(0, 0);
-		lcd.print(d.toString().substring(16, 24));
-		lcd.once("printed", function () {
-			lcd.setCursor(0, 1);
-			// lcd.print("Push the button");
-			lcd.print(d.getDate().toString() + " " + monthNames[d.getMonth()] + " " + d.getFullYear().toString());
-		})
-	}, 1000);
+    console.log("LCD - ready");
+    setInterval(function () {
+        var d = new Date();
+        lcd.setCursor(0, 0);
+        lcd.print(d.toString().substring(16, 24));
+        lcd.once("printed", function () {
+            lcd.setCursor(0, 1);
+            // lcd.print("Push the button");
+            lcd.print(d.getDate().toString() + " " + monthNames[d.getMonth()] + " " + d.getFullYear().toString());
+        })
+    }, 1000);
 });
 
 // If ctrl+c is hit, free resources and exit.
 process.on('SIGINT', function () {
-	lcd.clear(
-		function () {
-			lcd.close(function () {
-				process.exit();
-			});
-		}
-	);
+    lcd.clear(
+        function () {
+            lcd.close(function () {
+                process.exit();
+            });
+        }
+    );
 });
 //</editor-fold>
 
@@ -135,5 +138,4 @@ function moveCamToPreset(presetID) {
 			console.log("Error: " + body);
 		}
 	})
-
 }
