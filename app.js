@@ -53,24 +53,9 @@ io.on('connection', function (socket) {
 var gpio5 = gpio.export(5, {
 	direction: "in",
 	ready: function () {
-		console.log("Raspicam: GPIO 5 - ready")
+		console.log("Raspicam: GPIO5 is ready\n")
 	}
 });
-
-// gpio5.on("change", function (val) {
-// 	// value will report either 1 or 0 (number) when the value changes
-// 	// console.log(val);
-// 	if (val === 1) {
-// 		moveCam("home");
-// 		//console.log("DONG!");
-// 		console.log("You've got company!");
-// 		lcd.clear();
-// 		lcd.setCursor(0, 0);
-// 		lcd.print("Access granted");
-// 	} else {
-// 		console.log("DING DONG!");
-// 	}
-// });
 
 // LCD
 lcd = new Lcd({
@@ -233,6 +218,5 @@ function savePicture() {
 			fs.writeFile('./webinterface/images/' + fileName, data.read());
 		});
 	}).end();
-
 
 }
