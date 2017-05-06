@@ -7,6 +7,7 @@ var nsIPCam = {
 		nsIPCam.initPresets();
 		nsIPCam.initButtons();
 		nsIPCam.initPictures();
+
 	},
 
 	initPresets: function () {
@@ -55,13 +56,15 @@ var nsIPCam = {
 
 		nsUtils.ajax("./imagelist", function (imageArray) {
 			for (var i = 0, len = imageArray.length; i < len; i++) {
-				var img    = document.createElement("img");
-				img.src = imageArray[i];
+				var img   = document.createElement("img");
+				var index = len - i - 1;
+				img.src   = imageArray[index];
+				img.title = imageArray[index].substring(16, 35);
 				sec.appendChild(img);
 			}
 
 		});
-	}
+	},
 
 
 }
