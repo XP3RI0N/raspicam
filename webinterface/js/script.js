@@ -8,6 +8,11 @@ var nsIPCam = {
 		nsIPCam.initButtons();
 		nsIPCam.initPictures();
 
+		var socket = io();
+		socket.on("image", function (fileName) {
+			console.log(fileName);
+			nsIPCam.newPicture(fileName);
+		});
 	},
 
 	initPresets: function () {
@@ -66,5 +71,13 @@ var nsIPCam = {
 		});
 	},
 
+
+	newPicture: function(fileName) {
+		var sec = document.getElementById("photos");
+		var img   = document.createElement("img");
+		img.src = "images/" + fileName;
+		img.title = fileName.substr(9, 19);
+		sec.insertBefore(img, sec.childNodes[0]);
+	}
 
 }
