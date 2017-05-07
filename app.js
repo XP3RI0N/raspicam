@@ -1,3 +1,6 @@
+var username = "student";
+var password = "tasjekoffie";
+
 var gpio = require('gpio');
 var Lcd = require('lcd');
 var glob = require("glob");
@@ -12,6 +15,10 @@ var io      = require('socket.io')(server);
 var monthNames = ["January", "February", "March", "April", "May", "June",
 	"July", "August", "Septembr", "October", "November", "December"
 ];
+
+var presets = require('./webinterface/js/presets.js').list;
+var scanStatus = false;
+var scanStarted = false;
 
 server.listen(8080);
 
@@ -43,102 +50,129 @@ io.on('connection', function (socket) {
 
 	socket.on('savePicture', function () {
 		savePicture();
-	})
+	});
+
+	socket.on("scanStatus", function (status) {
+		scanStatus = status;
+		console.log(scanStatus);
+		if (scanStarted)
+			return;
+
+		scan();
+		scanStarted = true;
+	});
+
 });
 
+function scan() {
+	var presetID = 1;
 
- //<editor-fold desc="pi hardware">
- // GPIO
- var gpio5 = gpio.export(5, {
- direction: "in",
- ready: function () {
- console.log("Raspicam: GPIO5 is ready\n")
- }
- });
+	setInterval(function () {
+		if (!scanStatus)
+			return;
 
- // LCD
- lcd = new Lcd({
- rs: 20,
- e: 16,
- data: [6, 13, 19, 26],
- cols: 16,
- rows: 2
- });
+		moveCamToPreset(presetID);
+		if (presetID === presets.length)
+			presetID = 1;
+		else
+			presetID++;
+	}, 5000);
+}
 
- lcd.on('ready', function () {
- console.log("Raspicam: LCD is ready");
+//<editor-fold desc="pi hardware">
+// GPIO
+var gpio5 = gpio.export(5, {
+	direction: "in",
+	ready    : function () {
+		console.log("Raspicam: GPIO5 is ready\n")
+	}
+});
 
- // displayDateTime (Every second), cameraScan
- // Button pushed, stop displayDateTime
- // displayWelcomeMessage, moveCamToHome
- // takeScreenshot
- // Wait (5 seconds)
- // displayDateTime (Every second), cameraScan
+// LCD
+lcd = new Lcd({
+	rs  : 20,
+	e   : 16,
+	data: [6, 13, 19, 26],
+	cols: 16,
+	rows: 2
+});
 
- var displayFree = true, displayBusy;
+lcd.on('ready', function () {
+	console.log("Raspicam: LCD is ready");
 
- var v = gpio5.on("change", function () {
- if (v.value === 1) {
- displayFree = false;
+	// displayDateTime (Every second), cameraScan
+	// Button pushed, stop displayDateTime
+	// displayWelcomeMessage, moveCamToHome
+	// takeScreenshot
+	// Wait (5 seconds)
+	// displayDateTime (Every second), cameraScan
 
- displayWelcomeAndMoveCamHome();
+	var displayFree = true, displayBusy;
 
- clearTimeout(displayBusy);
- displayBusy = setTimeout(function () {
- displayFree = true;
- }, 3000);
- }
- });
+	var v = gpio5.on("change", function () {
+		if (v.value === 1) {
+			displayFree = false;
 
- setInterval(function () {
- if (displayFree)
- displayDateTime();
- }, 1000);
- });
+			scanStatus = false;
+			displayWelcomeAndMoveCamHome();
 
- function displayWelcomeAndMoveCamHome() {
- console.log("Raspicam: DING DONG! - You've got company!");
- moveCam("home");
+			clearTimeout(displayBusy);
+			displayBusy = setTimeout(function () {
+				displayFree = true;
+			}, 3000);
+		}
+	});
 
- setTimeout(function () {
- savePicture();
- }, 1500);
+	setInterval(function () {
+		if (displayFree)
+			displayDateTime();
+	}, 1000);
+});
 
- lcd.clear();
- lcd.setCursor(0, 0);
+function displayWelcomeAndMoveCamHome() {
+	console.log("Raspicam: DING DONG! - You've got company!");
+	moveCam("home");
 
- if (Math.round(Math.random()) === 1) {
- lcd.print("Access granted");
- console.log("Raspicam: Access granted\n");
- } else {
- lcd.print("Access denied");
- console.log("Raspicam: Access denied\n");
- }
- }
+	setTimeout(function () {
+		savePicture();
+		scanStatus = true;
+	}, 1500);
 
- function displayDateTime() {
- var d = new Date();
- lcd.clear();
- lcd.setCursor(0, 0);
- lcd.print(d.toString().substring(16, 24));
- lcd.once("printed", function () {
- lcd.setCursor(0, 1);
- lcd.print(d.getDate().toString() + " " + monthNames[d.getMonth()] + " " + d.getFullYear().toString());
- });
- }
+	lcd.clear();
+	lcd.setCursor(0, 0);
+
+	if (Math.round(Math.random()) === 1) {
+		lcd.print("Access granted");
+		console.log("Raspicam: Access granted\n");
+	} else {
+		lcd.print("Access denied");
+		console.log("Raspicam: Access denied\n");
+	}
+}
+
+function displayDateTime() {
+	var d = new Date();
+	lcd.clear();
+	lcd.setCursor(0, 0);
+	lcd.print(d.toString().substring(16, 24));
+	lcd.once("printed", function () {
+		lcd.setCursor(0, 1);
+		lcd.print(d.getDate().toString() + " " + monthNames[d.getMonth()] + " " + d.getFullYear().toString());
+	});
+}
 
 
- // If ctrl+c is hit, free resources and exit.
- process.on('SIGINT', function () {
- lcd.clear(
- function () {
- lcd.close(function () {
- process.exit();
- });
- }
- );
- });
- //</editor-fold>
+// If ctrl+c is hit, free resources and exit.
+process.on('SIGINT', function () {
+	lcd.clear(
+		function () {
+			lcd.close(function () {
+				process.exit();
+			});
+		}
+	);
+});
+//</editor-fold>
 
 function moveCam(move) {
 	if (!move)
@@ -160,8 +194,8 @@ function moveCam(move) {
 
 	request(url, {
 		'auth': {
-			'user'           : 'student',
-			'pass'           : 'tasjekoffie',
+			'user'           : username,
+			'pass'           : password,
 			'sendImmediately': false
 		}
 	}, function (error, response, body) {
@@ -175,15 +209,14 @@ function moveCamToPreset(presetID) {
 	if (!presetID)
 		return;
 
-	var presets = require('./webinterface/js/presets.js').list;
 	var preset  = presets[presetID - 1];
 
 	console.log(preset);
 
 	request("http://172.23.49.1/axis-cgi/com/ptz.cgi?camera=1&pan=" + preset.pan + "&tilt=" + preset.tilt + "&zoom=" + preset.zoom + "&autofocus=on", {
 		'auth': {
-			'user'           : 'student',
-			'pass'           : 'tasjekoffie',
+			'user'           : username,
+			'pass'           : password,
 			'sendImmediately': false
 		}
 	}, function (error, response, body) {
@@ -199,7 +232,7 @@ function savePicture() {
 		Stream = require('stream').Transform,
 		fs     = require('fs');
 
-	var url = 'http://student:tasjekoffie@172.23.49.1/axis-cgi/jpg/image.cgi?resolution=320x240%20&camera=1&compression=25';
+	var url = 'http://' + username + ':' + password + '@172.23.49.1/axis-cgi/jpg/image.cgi?resolution=320x240%20&camera=1&compression=25';
 
 	http.request(url, function (response) {
 		var data = new Stream();

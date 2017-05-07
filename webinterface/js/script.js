@@ -10,7 +10,7 @@ var nsIPCam = {
 
 		var socket = io();
 		socket.on("image", function (fileName) {
-			console.log(fileName);
+			//console.log(fileName);
 			nsIPCam.newPicture(fileName);
 		});
 	},
@@ -33,17 +33,22 @@ var nsIPCam = {
 	},
 
 	initButtons: function () {
-		var buttons = document.querySelectorAll(".controlPanel > button")
+		var buttons = document.querySelectorAll(".controlPanel > button");
 
 		for (var i = 0, len = buttons.length; i < len; i++) {
 			buttons[i].addEventListener("click", function () {
 				nsIPCam.sendCommand({ command: "move", param: this.id });
-			})
+			});
 		}
 
 		document.getElementById("photo").addEventListener("click", function () {
 			nsIPCam.savePicture();
-		})
+		});
+
+		document.getElementById("scan").addEventListener("change", function () {
+			//console.log(this.checked);
+			nsIPCam.changeScanStatus(this.checked);
+		});
 	},
 
 	sendCommand: function (command) {
@@ -71,13 +76,17 @@ var nsIPCam = {
 		});
 	},
 
-
-	newPicture: function(fileName) {
-		var sec = document.getElementById("photos");
+	newPicture: function (fileName) {
+		var sec   = document.getElementById("photos");
 		var img   = document.createElement("img");
-		img.src = "images/" + fileName;
+		img.src   = "images/" + fileName;
 		img.title = fileName.substr(9, 19);
 		sec.insertBefore(img, sec.childNodes[0]);
+	},
+
+	changeScanStatus: function (status) {
+		var socket = io();
+		socket.emit("scanStatus", status);
 	}
 
 }
